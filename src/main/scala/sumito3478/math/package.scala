@@ -79,11 +79,10 @@ package object math {
   }
 
   def fib(n: Int): Int = {
-    ((pow(GoldMean, n) - pow(-GoldMean, -n)) / pow(5, 1.0 / 2)).
-      asInstanceOf[Int]
+    ((pow(GoldMean, n) - pow(-GoldMean, -n)) / pow(5, 1.0 / 2)).toInt
   }
 
   def lucas(n: Int): Int = {
-    (pow(GoldMean, n) + pow(-GoldMean, -n)).asInstanceOf[Int]
+    (pow(GoldMean, n) + pow(-GoldMean, -n)).toInt
   }
 }
