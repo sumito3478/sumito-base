@@ -1,0 +1,20 @@
+# sbt
+/target
+/project/target
+/project/project
+
+# my sbt-dir
+/sbt-dir
+
+# eclipse
+.project
+.classpath
+.cache
+
+# idea
+.idea
+.idea_modules
+
+# sbt-package-dist
+/dist
+
