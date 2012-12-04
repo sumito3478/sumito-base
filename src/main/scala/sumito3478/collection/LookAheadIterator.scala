@@ -6,28 +6,28 @@ import scala.collection.mutable.Queue
 
 trait LookAheadIterator[+A] extends BufferedIterator[A] {
   protected[this] val intern: Iterator[A]
-  
+
   private[this] val buffer = new Queue[A]
-  
+
   def lookAhead(n: Int): IndexedSeq[A] = {
     import sumito3478.collection.Riches._
     val d = n - buffer.length
-    if(d > 0) {
+    if (d > 0) {
       buffer.enqueue(intern.forceTake(d): _*)
     }
     (new VectorBuilder[A]() ++= buffer.slice(0, n)).result
   }
-  
+
   def head: A = {
     lookAhead(1).head
   }
-  
+
   def hasNext: Boolean = {
     lookAhead(1).length > 0
   }
-  
+
   def next: A = {
-    if(buffer.isEmpty) {
+    if (buffer.isEmpty) {
       intern.next
     } else {
       buffer.dequeue
