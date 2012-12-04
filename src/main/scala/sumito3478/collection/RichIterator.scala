@@ -36,4 +36,10 @@ trait RichIterator[+A] {
     }
     this
   }
+
+  def lookAhead: LookAheadIterator[A] = {
+    new LookAheadIterator[A] {
+      val intern: Iterator[A] = self
+    }
+  }
 }
