@@ -10,7 +10,6 @@ trait LookAheadIterator[+A] extends BufferedIterator[A] {
   private[this] val buffer = new Queue[A]
 
   def lookAhead(n: Int): IndexedSeq[A] = {
-    import sumito3478.collection.Riches._
     val d = n - buffer.length
     if (d > 0) {
       buffer.enqueue(intern.forceTake(d): _*)
