@@ -3,10 +3,9 @@ package sumito3478.collection
 import scala.collection.BufferedIterator
 import scala.collection.immutable.VectorBuilder
 import scala.collection.mutable.Queue
+import sumito3478.WrapperLike
 
-trait LookAheadIterator[+A] extends BufferedIterator[A] {
-  protected[this] val intern: Iterator[A]
-
+trait LookAheadIterator[+A] extends BufferedIterator[A] with WrapperLike[Iterator[A]] {
   private[this] val buffer = new Queue[A]
 
   def lookAhead(n: Int): IndexedSeq[A] = {
