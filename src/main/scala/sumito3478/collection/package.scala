@@ -1,5 +1,5 @@
-package sumito3478.collection
+package sumito3478
 
-object Riches {
+package object collection {
   implicit class RIterator[+A](val self: Iterator[A]) extends RichIterator[A]
 }
