@@ -11,8 +11,8 @@ trait RichIterator[+A] extends WrapperLike[Iterator[A]]{
       break =>
         0 until n foreach {
           _ =>
-            if (self.hasNext) {
-              builder += self.next
+            if (intern.hasNext) {
+              builder += intern.next
             } else {
               break
             }
@@ -26,8 +26,8 @@ trait RichIterator[+A] extends WrapperLike[Iterator[A]]{
       break =>
         0 until n foreach {
           _ =>
-            if (self.hasNext) {
-              self.next
+            if (intern.hasNext) {
+              intern.next
             } else {
               break
             }
@@ -37,8 +37,9 @@ trait RichIterator[+A] extends WrapperLike[Iterator[A]]{
   }
 
   def lookAhead: LookAheadIterator[A] = {
+    val i = intern
     new LookAheadIterator[A] {
-      val intern: Iterator[A] = self
+      val intern: Iterator[A] = i
     }
   }
 }
