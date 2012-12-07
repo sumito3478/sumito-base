@@ -5,10 +5,10 @@ import org.specs2.specification.Scope
 import scala.collection.mutable.Queue
 
 class BreaksSpec extends SpecificationWithJUnit {
-  "Breaks#breakable" should {
+  "breakable" should {
     "be able to break from scope" in {
       val queue = new Queue[Int]
-      Breaks.breakable {
+      breakable {
         break =>
           0 to 10 foreach {
             i =>
@@ -25,14 +25,14 @@ class BreaksSpec extends SpecificationWithJUnit {
     
     "be able to break from nested breakable scope" in {
       val queue = new Queue[Int]
-      Breaks.breakable {
+      breakable {
         break =>
           0 to 10 foreach {
             i =>
               if(i < 5) {
                 queue.enqueue(i)
               } else {
-                Breaks.breakable {
+                breakable {
                   break2 =>
                     11 to 20 foreach {
                       i =>

@@ -1,7 +1,7 @@
 package sumito3478
 
 import scala.collection.immutable.VectorBuilder
-import sumito3478.util.control.Breaks.breakable
+import sumito3478.util.control.breakable
 
 package object collection {
   implicit class RichIterator[+A](

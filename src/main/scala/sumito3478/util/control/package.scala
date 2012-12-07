@@ -1,6 +1,6 @@
-package sumito3478.util.control
+package sumito3478.util
 
-object Breaks {
+package object control {
   def breakable(op: (=> Nothing) => Unit): Unit = {
     op({ return })
   }
