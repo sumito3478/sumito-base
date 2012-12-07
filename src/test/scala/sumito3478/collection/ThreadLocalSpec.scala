@@ -1,16 +1,15 @@
-package sumito3478.collection.immutable
+package sumito3478.collection
 
 import org.specs2.mutable.SpecificationWithJUnit
-import org.specs2.specification.Scope
 import scala.collection.mutable.Queue
 
 class ThreadLocalSpec extends SpecificationWithJUnit {
   "ThreadLocal#apply" should {
     "the instance of the thread local variable" in {
-      (ThreadLocal[Int] {
+      ThreadLocal{
         () =>
           0
-      })() mustEqual 0
+      }() mustEqual 0
     }
     
     "the same instance in one thread" in {
