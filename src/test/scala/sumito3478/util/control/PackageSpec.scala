@@ -4,7 +4,7 @@ import org.specs2.mutable.SpecificationWithJUnit
 import org.specs2.specification.Scope
 import scala.collection.mutable.Queue
 
-class BreaksSpec extends SpecificationWithJUnit {
+class PackageSpec extends SpecificationWithJUnit {
   "breakable" should {
     "be able to break from scope" in {
       val queue = new Queue[Int]
