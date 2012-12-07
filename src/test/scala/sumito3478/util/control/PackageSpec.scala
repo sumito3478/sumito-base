@@ -39,7 +39,7 @@ class PackageSpec extends SpecificationWithJUnit {
                         if(i < 15) {
                           queue.enqueue(i)
                         } else {
-                          break // break from first breakable, not second
+                          break // break from outer breakable, not inner
                         }
                     }
                 }
