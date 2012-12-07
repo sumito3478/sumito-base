@@ -2,10 +2,9 @@ package sumito3478.collection
 
 import scala.collection.immutable.VectorBuilder
 import sumito3478.util.control.Breaks.breakable
+import sumito3478.WrapperLike
 
-trait RichIterator[+A] {
-  protected[this] val self: Iterator[A]
-
+trait RichIterator[+A] extends WrapperLike[Iterator[A]]{
   def forceTake(n: Int): IndexedSeq[A] = {
     val builder = new VectorBuilder[A]
     breakable {
