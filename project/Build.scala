@@ -22,6 +22,12 @@ object SumitoTextBuild extends Build {
         new java.io.File(
           new java.io.File(System.getProperty("user.home")),
           ".ssh/sumito3478-sshkey"))),
+      resolvers := Seq(
+        "Maven Repository Mirror" at "http://uk.maven.org/maven2"),
+      externalResolvers <<= resolvers map {
+        rs =>
+          Resolver.withDefaultResolvers(rs, mavenCentral = false)
+      },
       libraryDependencies ++= Seq(
         "org.specs2" %% "specs2" % "1.12.3" % "test",
         "org.mockito" % "mockito-core" % "1.9.5" % "test",
