@@ -12,6 +12,9 @@ object SumitoTextBuild extends Build {
     Seq(
       version := "0.0.1",
       scalaVersion := "2.10.0-RC3",
+      scalacOptions ++= Seq(
+        "-target:jvm-1.7"
+        ),
       publishMavenStyle := true,
       publishTo := Some(Resolver.sftp(
         "sumito3478 Maven Repository",
