@@ -13,7 +13,10 @@ object SumitoTextBuild extends Build {
       version := "0.0.1",
       scalaVersion := "2.10.0-RC3",
       scalacOptions ++= Seq(
-        "-target:jvm-1.7"
+        "-target:jvm-1.7",
+        "-deprecation",
+        "-explaintypes",
+        "-unchecked"
         ),
       publishMavenStyle := true,
       publishTo := Some(Resolver.sftp(
