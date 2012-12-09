@@ -15,6 +15,7 @@ object SumitoTextBuild extends Build {
       scalacOptions ++= Seq(
         "-target:jvm-1.7",
         "-deprecation",
+        "-feature",
         "-explaintypes",
         "-unchecked",
         "-optimise"
