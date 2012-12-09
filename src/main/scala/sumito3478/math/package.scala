@@ -1,6 +1,10 @@
 package sumito3478
 
 import scala.{ math => smath }
+import com.google.common.primitives.SignedBytes
+import com.google.common.primitives.Shorts
+import com.google.common.primitives.Ints
+import com.google.common.primitives.Chars
 
 package object math {
   val E = smath.E
@@ -84,5 +88,23 @@ package object math {
 
   def lucas(n: Int): Int = {
     (pow(GoldMean, n) + pow(-GoldMean, -n)).toInt
+  }
+
+  implicit class RichLong(val value: Long) extends AnyVal {
+    def toByteChecked: Byte = {
+      SignedBytes.checkedCast(value)
+    }
+
+    def toShortChecked: Short = {
+      Shorts.checkedCast(value)
+    }
+
+    def toCharChecked: Char = {
+      Chars.checkedCast(value)
+    }
+
+    def toIntChecked: Int = {
+      Ints.checkedCast(value)
+    }
   }
 }
