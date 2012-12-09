@@ -16,7 +16,8 @@ object SumitoTextBuild extends Build {
         "-target:jvm-1.7",
         "-deprecation",
         "-explaintypes",
-        "-unchecked"
+        "-unchecked",
+        "-optimise"
         ),
       publishMavenStyle := true,
       publishTo := Some(Resolver.sftp(
