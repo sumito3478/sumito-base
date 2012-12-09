@@ -1,6 +1,10 @@
 package sumito3478
 
 import scala.{ math => smath }
+import com.google.common.primitives.SignedBytes
+import com.google.common.primitives.Shorts
+import com.google.common.primitives.Ints
+import com.google.common.primitives.Chars
 
 package object math {
   val E = smath.E
@@ -15,7 +19,7 @@ package object math {
   def asin(x: Double): Double = smath.asin(x)
   def acos(x: Double): Double = smath.acos(x)
   def atan(x: Double): Double = smath.atan(x)
-  
+
   def toRadians(x: Double): Double = smath.toRadians(x)
 
   def toDegrees(x: Double): Double = smath.toDegrees(x)
@@ -47,8 +51,8 @@ package object math {
   def max(x: Double, y: Double): Double = smath.max(x, y)
 
   def min(x: Int, y: Int): Int = smath.min(x, y)
-  def min(x: Long, y: Long): Long  = smath.min(x, y)
-  def min(x: Float, y: Float): Float  = smath.min(x, y)
+  def min(x: Long, y: Long): Long = smath.min(x, y)
+  def min(x: Float, y: Float): Float = smath.min(x, y)
   def min(x: Double, y: Double): Double = smath.min(x, y)
 
   def signum(x: Double): Double = smath.signum(x)
@@ -84,5 +88,23 @@ package object math {
 
   def lucas(n: Int): Int = {
     (pow(GoldMean, n) + pow(-GoldMean, -n)).toInt
+  }
+
+  implicit class RichLong(val value: Long) extends AnyVal {
+    def toByteChecked: Byte = {
+      SignedBytes.checkedCast(value)
+    }
+
+    def toShortChecked: Short = {
+      Shorts.checkedCast(value)
+    }
+
+    def toCharChecked: Char = {
+      Chars.checkedCast(value)
+    }
+
+    def toIntChecked: Int = {
+      Ints.checkedCast(value)
+    }
   }
 }
