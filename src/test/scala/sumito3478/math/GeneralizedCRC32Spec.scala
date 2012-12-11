@@ -8,7 +8,7 @@ import com.google.common.primitives.Longs
 import java.nio.ByteOrder
 import com.google.common.primitives.UnsignedInts
 
-class CRC32CSpec extends SpecificationWithJUnit {
+class GeneralizedCRC32Spec extends SpecificationWithJUnit {
   val testData: IndexedSeq[Byte] = {
     val builder = new VectorBuilder[Byte]
     builder ++= Array[Int](
@@ -27,20 +27,20 @@ class CRC32CSpec extends SpecificationWithJUnit {
     builder.result
   }
 
-  "CRC32C.crc(CRC32C.init, Iterator[Byte])" should {
-    "return CRC32-C hash value" in {
-      CRC32C.crc(CRC32C.init, testData.iterator) mustEqual 0x99b08a14
+  "GeneralizedCRC32.crc(GeneralizedCRC32.init, Iterator[Byte])" should {
+    "returns generalized CRC hash value" in {
+      GeneralizedCRC32.crc(GeneralizedCRC32.init, testData.iterator) mustEqual 0xee2bb609
     }
   }
 
-  "CRC32C.crc(CRC32C.init, Long)" should {
-    "return CRC32-C hash value for the little endian binary representation of the long value" in {
+  "GeneralizedCRC32C.crc(GeneralizedCRC32C.init, Long)" should {
+    "return generalized CRC hash value for the little endian binary representation of the long value" in {
       val input = 0x43212421943321L
       val buf = ByteBuffer.allocate(8)
       buf.order(ByteOrder.LITTLE_ENDIAN)
       buf.putLong(input)
       val array = buf.array()
-      CRC32C.crc(CRC32C.init, array.iterator) mustEqual 0xbfabee9c
+      GeneralizedCRC32.crc(GeneralizedCRC32.init, input) mustEqual GeneralizedCRC32.crc(GeneralizedCRC32.init, array.iterator)
     }
   }
 }
