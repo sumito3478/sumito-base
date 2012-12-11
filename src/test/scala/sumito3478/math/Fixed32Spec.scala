@@ -9,7 +9,7 @@ class Fixed32Spec extends SpecificationWithJUnit {
       val lhs = Fixed32(5, 253) // 1533
       val rhs = Fixed32(7, 7) // 1799
       (lhs + rhs == Fixed32(13, 4)) must beTrue
-      
+
     }
   }
   "Fixed32#*" should {
