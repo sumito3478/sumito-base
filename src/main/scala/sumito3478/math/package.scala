@@ -5,6 +5,9 @@ import com.google.common.primitives.SignedBytes
 import com.google.common.primitives.Shorts
 import com.google.common.primitives.Ints
 import com.google.common.primitives.Chars
+import scala.runtime.IntegralProxy
+import java.nio.ByteBuffer
+import java.nio.ByteOrder
 
 package object math {
   val E = smath.E
@@ -90,21 +93,51 @@ package object math {
     (pow(GoldMean, n) + pow(-GoldMean, -n)).toInt
   }
 
-  implicit class RichLong(val value: Long) extends AnyVal {
+  implicit class RichLong(val self: Long) extends IntegralProxy[Long] {
+    import scala.runtime.{RichLong => SRich}
+    
+    def num = Numeric.LongIsIntegral
+    
+    def ord = Ordering.Long
+    
+    def srich: SRich = {
+      new SRich(self)
+    }
+    
+    def toBinaryString: String = {
+      srich.toBinaryString
+    }
+    
+    def toHexString: String = {
+      srich.toHexString
+    }
+    
+    def toOctalString: String = {
+      srich.toOctalString
+    }
+    
+    def bswap: Long = {
+      val buffer = ByteBuffer.allocate(8)
+      buffer.order(ByteOrder.LITTLE_ENDIAN)
+      buffer.putLong(self)
+      buffer.order(ByteOrder.BIG_ENDIAN)
+      buffer.getLong(0)
+    }
+    
     def toByteChecked: Byte = {
-      SignedBytes.checkedCast(value)
+      SignedBytes.checkedCast(self)
     }
 
     def toShortChecked: Short = {
-      Shorts.checkedCast(value)
+      Shorts.checkedCast(self)
     }
 
     def toCharChecked: Char = {
-      Chars.checkedCast(value)
+      Chars.checkedCast(self)
     }
 
     def toIntChecked: Int = {
-      Ints.checkedCast(value)
+      Ints.checkedCast(self)
     }
   }
 }
