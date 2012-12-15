@@ -10,7 +10,7 @@ object SumitoTextBuild extends Build {
     settings = StandardProject.newSettings
   ).settings(
     Seq(
-      version := "0.0.10",
+      version := "0.0.11",
       scalaVersion := "2.10.0-RC5",
       scalacOptions ++= Seq(
         "-target:jvm-1.7",
@@ -31,12 +31,14 @@ object SumitoTextBuild extends Build {
           new java.io.File(System.getProperty("user.home")),
           ".ssh/sumito3478-sshkey"))),
       resolvers := Seq(
+        "Typesafe Snapshots" at "http://repo.typesafe.com/typesafe/snapshots",
         "Maven Repository Mirror" at "http://uk.maven.org/maven2"),
       externalResolvers <<= resolvers map {
         rs =>
           Resolver.withDefaultResolvers(rs, mavenCentral = false)
       },
       libraryDependencies ++= Seq(
+        "org.scalaz" % "scalaz-core" % "7.0.0-M6" cross CrossVersion.full,
         "org.specs2" %% "specs2" % "1.12.3" % "test",
         "org.mockito" % "mockito-core" % "1.9.5" % "test",
         "junit" % "junit" % "4.11" % "test",
