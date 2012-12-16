@@ -31,12 +31,17 @@ package object numeric {
           builder += s"def toHexString: String = J${prim}.toHexString(intern)"
           builder += s"def toOctalString: String = J${prim}.toOctalString(intern)"
         }
-        prims foreach {
+        builder ++= prims map {
           prim2 =>
-            builder += s"""def to${prim2}Checked: ${prim2} = {
+            s"""def to${prim2}Checked: ${prim2} = {
               |val ret = intern.to${prim2}
               |val restored = ret.to${prim}
-              |require(restored == intern, s"checked cast from $${intern}: ${prim} to ${prims} failed.)")
+              |require(restored == intern, f"checked cast from ${
+              if (List("Byte", "Short", "Int", "Long").contains(prim))
+                "0x${intern}%x"
+              else
+                "${intern}"
+            }: ${prim} to ${prim2} failed.")
               |ret
               |}""".stripMargin
         }
@@ -48,37 +53,37 @@ package object numeric {
     def toByteChecked: Byte = {
       val ret = intern.toByte
       val restored = ret.toByte
-      require(restored == intern, s"checked cast from ${intern}: Byte to List(Byte, Short, Int, Long, Float, Double) failed.)")
+      require(restored == intern, f"checked cast from 0x${intern}%x: Byte to Byte failed.")
       ret
     }
     def toShortChecked: Short = {
       val ret = intern.toShort
       val restored = ret.toByte
-      require(restored == intern, s"checked cast from ${intern}: Byte to List(Byte, Short, Int, Long, Float, Double) failed.)")
+      require(restored == intern, f"checked cast from 0x${intern}%x: Byte to Short failed.")
       ret
     }
     def toIntChecked: Int = {
       val ret = intern.toInt
       val restored = ret.toByte
-      require(restored == intern, s"checked cast from ${intern}: Byte to List(Byte, Short, Int, Long, Float, Double) failed.)")
+      require(restored == intern, f"checked cast from 0x${intern}%x: Byte to Int failed.")
       ret
     }
     def toLongChecked: Long = {
       val ret = intern.toLong
       val restored = ret.toByte
-      require(restored == intern, s"checked cast from ${intern}: Byte to List(Byte, Short, Int, Long, Float, Double) failed.)")
+      require(restored == intern, f"checked cast from 0x${intern}%x: Byte to Long failed.")
       ret
     }
     def toFloatChecked: Float = {
       val ret = intern.toFloat
       val restored = ret.toByte
-      require(restored == intern, s"checked cast from ${intern}: Byte to List(Byte, Short, Int, Long, Float, Double) failed.)")
+      require(restored == intern, f"checked cast from 0x${intern}%x: Byte to Float failed.")
       ret
     }
     def toDoubleChecked: Double = {
       val ret = intern.toDouble
       val restored = ret.toByte
-      require(restored == intern, s"checked cast from ${intern}: Byte to List(Byte, Short, Int, Long, Float, Double) failed.)")
+      require(restored == intern, f"checked cast from 0x${intern}%x: Byte to Double failed.")
       ret
     }
   }
@@ -88,37 +93,37 @@ package object numeric {
     def toByteChecked: Byte = {
       val ret = intern.toByte
       val restored = ret.toShort
-      require(restored == intern, s"checked cast from ${intern}: Short to List(Byte, Short, Int, Long, Float, Double) failed.)")
+      require(restored == intern, f"checked cast from 0x${intern}%x: Short to Byte failed.")
       ret
     }
     def toShortChecked: Short = {
       val ret = intern.toShort
       val restored = ret.toShort
-      require(restored == intern, s"checked cast from ${intern}: Short to List(Byte, Short, Int, Long, Float, Double) failed.)")
+      require(restored == intern, f"checked cast from 0x${intern}%x: Short to Short failed.")
       ret
     }
     def toIntChecked: Int = {
       val ret = intern.toInt
       val restored = ret.toShort
-      require(restored == intern, s"checked cast from ${intern}: Short to List(Byte, Short, Int, Long, Float, Double) failed.)")
+      require(restored == intern, f"checked cast from 0x${intern}%x: Short to Int failed.")
       ret
     }
     def toLongChecked: Long = {
       val ret = intern.toLong
       val restored = ret.toShort
-      require(restored == intern, s"checked cast from ${intern}: Short to List(Byte, Short, Int, Long, Float, Double) failed.)")
+      require(restored == intern, f"checked cast from 0x${intern}%x: Short to Long failed.")
       ret
     }
     def toFloatChecked: Float = {
       val ret = intern.toFloat
       val restored = ret.toShort
-      require(restored == intern, s"checked cast from ${intern}: Short to List(Byte, Short, Int, Long, Float, Double) failed.)")
+      require(restored == intern, f"checked cast from 0x${intern}%x: Short to Float failed.")
       ret
     }
     def toDoubleChecked: Double = {
       val ret = intern.toDouble
       val restored = ret.toShort
-      require(restored == intern, s"checked cast from ${intern}: Short to List(Byte, Short, Int, Long, Float, Double) failed.)")
+      require(restored == intern, f"checked cast from 0x${intern}%x: Short to Double failed.")
       ret
     }
   }
@@ -131,37 +136,37 @@ package object numeric {
     def toByteChecked: Byte = {
       val ret = intern.toByte
       val restored = ret.toInt
-      require(restored == intern, s"checked cast from ${intern}: Int to List(Byte, Short, Int, Long, Float, Double) failed.)")
+      require(restored == intern, f"checked cast from 0x${intern}%x: Int to Byte failed.")
       ret
     }
     def toShortChecked: Short = {
       val ret = intern.toShort
       val restored = ret.toInt
-      require(restored == intern, s"checked cast from ${intern}: Int to List(Byte, Short, Int, Long, Float, Double) failed.)")
+      require(restored == intern, f"checked cast from 0x${intern}%x: Int to Short failed.")
       ret
     }
     def toIntChecked: Int = {
       val ret = intern.toInt
       val restored = ret.toInt
-      require(restored == intern, s"checked cast from ${intern}: Int to List(Byte, Short, Int, Long, Float, Double) failed.)")
+      require(restored == intern, f"checked cast from 0x${intern}%x: Int to Int failed.")
       ret
     }
     def toLongChecked: Long = {
       val ret = intern.toLong
       val restored = ret.toInt
-      require(restored == intern, s"checked cast from ${intern}: Int to List(Byte, Short, Int, Long, Float, Double) failed.)")
+      require(restored == intern, f"checked cast from 0x${intern}%x: Int to Long failed.")
       ret
     }
     def toFloatChecked: Float = {
       val ret = intern.toFloat
       val restored = ret.toInt
-      require(restored == intern, s"checked cast from ${intern}: Int to List(Byte, Short, Int, Long, Float, Double) failed.)")
+      require(restored == intern, f"checked cast from 0x${intern}%x: Int to Float failed.")
       ret
     }
     def toDoubleChecked: Double = {
       val ret = intern.toDouble
       val restored = ret.toInt
-      require(restored == intern, s"checked cast from ${intern}: Int to List(Byte, Short, Int, Long, Float, Double) failed.)")
+      require(restored == intern, f"checked cast from 0x${intern}%x: Int to Double failed.")
       ret
     }
   }
@@ -174,37 +179,37 @@ package object numeric {
     def toByteChecked: Byte = {
       val ret = intern.toByte
       val restored = ret.toLong
-      require(restored == intern, s"checked cast from ${intern}: Long to List(Byte, Short, Int, Long, Float, Double) failed.)")
+      require(restored == intern, f"checked cast from 0x${intern}%x: Long to Byte failed.")
       ret
     }
     def toShortChecked: Short = {
       val ret = intern.toShort
       val restored = ret.toLong
-      require(restored == intern, s"checked cast from ${intern}: Long to List(Byte, Short, Int, Long, Float, Double) failed.)")
+      require(restored == intern, f"checked cast from 0x${intern}%x: Long to Short failed.")
       ret
     }
     def toIntChecked: Int = {
       val ret = intern.toInt
       val restored = ret.toLong
-      require(restored == intern, s"checked cast from ${intern}: Long to List(Byte, Short, Int, Long, Float, Double) failed.)")
+      require(restored == intern, f"checked cast from 0x${intern}%x: Long to Int failed.")
       ret
     }
     def toLongChecked: Long = {
       val ret = intern.toLong
       val restored = ret.toLong
-      require(restored == intern, s"checked cast from ${intern}: Long to List(Byte, Short, Int, Long, Float, Double) failed.)")
+      require(restored == intern, f"checked cast from 0x${intern}%x: Long to Long failed.")
       ret
     }
     def toFloatChecked: Float = {
       val ret = intern.toFloat
       val restored = ret.toLong
-      require(restored == intern, s"checked cast from ${intern}: Long to List(Byte, Short, Int, Long, Float, Double) failed.)")
+      require(restored == intern, f"checked cast from 0x${intern}%x: Long to Float failed.")
       ret
     }
     def toDoubleChecked: Double = {
       val ret = intern.toDouble
       val restored = ret.toLong
-      require(restored == intern, s"checked cast from ${intern}: Long to List(Byte, Short, Int, Long, Float, Double) failed.)")
+      require(restored == intern, f"checked cast from 0x${intern}%x: Long to Double failed.")
       ret
     }
   }
@@ -213,37 +218,37 @@ package object numeric {
     def toByteChecked: Byte = {
       val ret = intern.toByte
       val restored = ret.toFloat
-      require(restored == intern, s"checked cast from ${intern}: Float to List(Byte, Short, Int, Long, Float, Double) failed.)")
+      require(restored == intern, f"checked cast from ${intern}: Float to Byte failed.")
       ret
     }
     def toShortChecked: Short = {
       val ret = intern.toShort
       val restored = ret.toFloat
-      require(restored == intern, s"checked cast from ${intern}: Float to List(Byte, Short, Int, Long, Float, Double) failed.)")
+      require(restored == intern, f"checked cast from ${intern}: Float to Short failed.")
       ret
     }
     def toIntChecked: Int = {
       val ret = intern.toInt
       val restored = ret.toFloat
-      require(restored == intern, s"checked cast from ${intern}: Float to List(Byte, Short, Int, Long, Float, Double) failed.)")
+      require(restored == intern, f"checked cast from ${intern}: Float to Int failed.")
       ret
     }
     def toLongChecked: Long = {
       val ret = intern.toLong
       val restored = ret.toFloat
-      require(restored == intern, s"checked cast from ${intern}: Float to List(Byte, Short, Int, Long, Float, Double) failed.)")
+      require(restored == intern, f"checked cast from ${intern}: Float to Long failed.")
       ret
     }
     def toFloatChecked: Float = {
       val ret = intern.toFloat
       val restored = ret.toFloat
-      require(restored == intern, s"checked cast from ${intern}: Float to List(Byte, Short, Int, Long, Float, Double) failed.)")
+      require(restored == intern, f"checked cast from ${intern}: Float to Float failed.")
       ret
     }
     def toDoubleChecked: Double = {
       val ret = intern.toDouble
       val restored = ret.toFloat
-      require(restored == intern, s"checked cast from ${intern}: Float to List(Byte, Short, Int, Long, Float, Double) failed.)")
+      require(restored == intern, f"checked cast from ${intern}: Float to Double failed.")
       ret
     }
   }
@@ -252,37 +257,37 @@ package object numeric {
     def toByteChecked: Byte = {
       val ret = intern.toByte
       val restored = ret.toDouble
-      require(restored == intern, s"checked cast from ${intern}: Double to List(Byte, Short, Int, Long, Float, Double) failed.)")
+      require(restored == intern, f"checked cast from ${intern}: Double to Byte failed.")
       ret
     }
     def toShortChecked: Short = {
       val ret = intern.toShort
       val restored = ret.toDouble
-      require(restored == intern, s"checked cast from ${intern}: Double to List(Byte, Short, Int, Long, Float, Double) failed.)")
+      require(restored == intern, f"checked cast from ${intern}: Double to Short failed.")
       ret
     }
     def toIntChecked: Int = {
       val ret = intern.toInt
       val restored = ret.toDouble
-      require(restored == intern, s"checked cast from ${intern}: Double to List(Byte, Short, Int, Long, Float, Double) failed.)")
+      require(restored == intern, f"checked cast from ${intern}: Double to Int failed.")
       ret
     }
     def toLongChecked: Long = {
       val ret = intern.toLong
       val restored = ret.toDouble
-      require(restored == intern, s"checked cast from ${intern}: Double to List(Byte, Short, Int, Long, Float, Double) failed.)")
+      require(restored == intern, f"checked cast from ${intern}: Double to Long failed.")
       ret
     }
     def toFloatChecked: Float = {
       val ret = intern.toFloat
       val restored = ret.toDouble
-      require(restored == intern, s"checked cast from ${intern}: Double to List(Byte, Short, Int, Long, Float, Double) failed.)")
+      require(restored == intern, f"checked cast from ${intern}: Double to Float failed.")
       ret
     }
     def toDoubleChecked: Double = {
       val ret = intern.toDouble
       val restored = ret.toDouble
-      require(restored == intern, s"checked cast from ${intern}: Double to List(Byte, Short, Int, Long, Float, Double) failed.)")
+      require(restored == intern, f"checked cast from ${intern}: Double to Double failed.")
       ret
     }
   }
