@@ -225,7 +225,7 @@ object CityHash {
       }
       case len if len >= 4 => {
         val mul = k._2 + len * 2
-        val a = s.getLong()
+        val a = s.getInt()
         hashLen16(len + (a << 3), (s + len - 4).getInt(), mul)
       }
       case len if len > 0 => {
