@@ -25,6 +25,20 @@ package object numeric {
         builder += s"implicit class ${prim}Val(val intern: ${prim}) extends AnyVal {"
         if (List("Short", "Int", "Long").contains(prim)) {
           builder += s"def bswap: ${prim} = J${prim}.reverseBytes(intern)"
+          builder += s"""def toLE: ${prim} = {
+            |if((0xcafebabe >>> 16) == 0xcafe) {
+            |intern
+            |} else {
+            |bswap
+            |}
+            |}""".stripMargin
+          builder += s"""def toBE: ${prim} = {
+            |if((0xcafebabe >>> 16) == 0xcafe) {
+            |bswap
+            |} else {
+            |intern
+            |}
+            |}""".stripMargin
         }
         if (List("Int", "Long").contains(prim)) {
           builder += s"def toBinaryString: String = J${prim}.toBinaryString(intern)"
@@ -49,6 +63,7 @@ package object numeric {
         builder.result mkString "\n"
     } mkString "\n\n"
   }
+
   implicit class ByteVal(val intern: Byte) extends AnyVal {
     def toByteChecked: Byte = {
       val ret = intern.toByte
@@ -90,6 +105,20 @@ package object numeric {
 
   implicit class ShortVal(val intern: Short) extends AnyVal {
     def bswap: Short = JShort.reverseBytes(intern)
+    def toLE: Short = {
+      if ((0xcafebabe >>> 16) == 0xcafe) {
+        intern
+      } else {
+        bswap
+      }
+    }
+    def toBE: Short = {
+      if ((0xcafebabe >>> 16) == 0xcafe) {
+        bswap
+      } else {
+        intern
+      }
+    }
     def toByteChecked: Byte = {
       val ret = intern.toByte
       val restored = ret.toShort
@@ -130,6 +159,20 @@ package object numeric {
 
   implicit class IntVal(val intern: Int) extends AnyVal {
     def bswap: Int = JInt.reverseBytes(intern)
+    def toLE: Int = {
+      if ((0xcafebabe >>> 16) == 0xcafe) {
+        intern
+      } else {
+        bswap
+      }
+    }
+    def toBE: Int = {
+      if ((0xcafebabe >>> 16) == 0xcafe) {
+        bswap
+      } else {
+        intern
+      }
+    }
     def toBinaryString: String = JInt.toBinaryString(intern)
     def toHexString: String = JInt.toHexString(intern)
     def toOctalString: String = JInt.toOctalString(intern)
@@ -173,6 +216,20 @@ package object numeric {
 
   implicit class LongVal(val intern: Long) extends AnyVal {
     def bswap: Long = JLong.reverseBytes(intern)
+    def toLE: Long = {
+      if ((0xcafebabe >>> 16) == 0xcafe) {
+        intern
+      } else {
+        bswap
+      }
+    }
+    def toBE: Long = {
+      if ((0xcafebabe >>> 16) == 0xcafe) {
+        bswap
+      } else {
+        intern
+      }
+    }
     def toBinaryString: String = JLong.toBinaryString(intern)
     def toHexString: String = JLong.toHexString(intern)
     def toOctalString: String = JLong.toOctalString(intern)
