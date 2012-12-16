@@ -117,11 +117,7 @@ package object math {
     }
     
     def bswap: Long = {
-      val buffer = ByteBuffer.allocate(8)
-      buffer.order(ByteOrder.LITTLE_ENDIAN)
-      buffer.putLong(self)
-      buffer.order(ByteOrder.BIG_ENDIAN)
-      buffer.getLong(0)
+      java.lang.Long.reverseBytes(self)
     }
     
     def toByteChecked: Byte = {
