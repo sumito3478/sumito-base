@@ -92,48 +92,4 @@ package object math {
   def lucas(n: Int): Int = {
     (pow(GoldMean, n) + pow(-GoldMean, -n)).toInt
   }
-
-  implicit class RichLong(val self: Long) extends IntegralProxy[Long] {
-    import scala.runtime.{RichLong => SRich}
-    
-    def num = Numeric.LongIsIntegral
-    
-    def ord = Ordering.Long
-    
-    def srich: SRich = {
-      new SRich(self)
-    }
-    
-    def toBinaryString: String = {
-      srich.toBinaryString
-    }
-    
-    def toHexString: String = {
-      srich.toHexString
-    }
-    
-    def toOctalString: String = {
-      srich.toOctalString
-    }
-    
-    def bswap: Long = {
-      java.lang.Long.reverseBytes(self)
-    }
-    
-    def toByteChecked: Byte = {
-      SignedBytes.checkedCast(self)
-    }
-
-    def toShortChecked: Short = {
-      Shorts.checkedCast(self)
-    }
-
-    def toCharChecked: Char = {
-      Chars.checkedCast(self)
-    }
-
-    def toIntChecked: Int = {
-      Ints.checkedCast(self)
-    }
-  }
 }

@@ -45,6 +45,15 @@ package object numeric {
           builder += s"def toHexString: String = J${prim}.toHexString(intern)"
           builder += s"def toOctalString: String = J${prim}.toOctalString(intern)"
         }
+        prim match {
+          case "Float" => {
+            builder += s"def toBits: Int = J${prim}.floatToIntBits(intern)"
+          }
+          case "Double" => {
+            builder += s"def toBits: Long = J${prim}.doubleToLongBits(intern)"
+          }
+          case _ => ()
+        }
         builder ++= prims map {
           prim2 =>
             s"""def to${prim2}Checked: ${prim2} = {
@@ -272,6 +281,7 @@ package object numeric {
   }
 
   implicit class FloatVal(val intern: Float) extends AnyVal {
+    def toBits: Int = JFloat.floatToIntBits(intern)
     def toByteChecked: Byte = {
       val ret = intern.toByte
       val restored = ret.toFloat
@@ -311,6 +321,7 @@ package object numeric {
   }
 
   implicit class DoubleVal(val intern: Double) extends AnyVal {
+    def toBits: Long = JDouble.doubleToLongBits(intern)
     def toByteChecked: Byte = {
       val ret = intern.toByte
       val restored = ret.toDouble
