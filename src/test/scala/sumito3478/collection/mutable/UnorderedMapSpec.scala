@@ -5,24 +5,24 @@ import scala.collection.mutable.Map
 
 class UnorderedMapSpec extends SpecificationWithJUnit {
   def sum[A](xs: Iterable[Int]) = (0 /: xs)((x, y) => x + y)
-  
+
   "(unorderedMap: Map)#+" should {
     "return Map that is sum of lhs and rhs" in {
       var s: Map[Int, Int] = UnorderedMap[Int, Int]()
       s = s + (2 -> 2)
-      s = s + (3 ->3, 4000 -> 4000, 10000 -> 10000)
-      sum(s map(_._2)) mustEqual 14005
+      s = s + (3 -> 3, 4000 -> 4000, 10000 -> 10000)
+      sum(s map (_._2)) mustEqual 14005
     }
   }
-  
+
   "(unorderedMap: Map)#++" should {
     "return Map that is sum of lhs and rhs" in {
       var s: Map[Int, Int] = UnorderedMap[Int, Int]()
       s = s ++ (0 until 5000 map (x => x * 2 -> x * 2))
-      sum(s map(_._2)) mustEqual 0x17d64b8
+      sum(s map (_._2)) mustEqual 0x17d64b8
     }
   }
-  
+
   "(unorderedMap: Map)#get" should {
     "return the Some(value) if exists, or None" in {
       var s: Map[Int, Int] = UnorderedMap[Int, Int]()
