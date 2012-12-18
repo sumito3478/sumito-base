@@ -5,9 +5,9 @@ import scala.collection.generic.MutableMapFactory
 import scala.collection.immutable.VectorBuilder
 import scala.collection.mutable.Map
 import scala.collection.mutable.MapLike
-
 import sumito3478.HashCoder
 import sumito3478.collection.ThreadLocal
+import sumito3478.Dummy0
 
 trait UnorderedMap[@specialized(
   Byte, Short, Char, Long, Float, Double) A, @specialized(
@@ -86,10 +86,6 @@ trait UnorderedMap[@specialized(
     this
   }
 
-  override def empty: UnorderedMap[A, B] = {
-    newBuilder.result
-  }
-
   def get(k: A): Option[B] = {
     val idx = findIndex(k)
     table(idx).find(_._1 == k).map(_._2)
@@ -106,16 +102,26 @@ trait UnorderedMap[@specialized(
   def iterator: Iterator[(A, B)] = {
     toVector.iterator
   }
+  
+  def empty[T >: UnorderedMap[A, B]](implicit dummy0: Dummy0): UnorderedMap[A, B]
+  
+  override def empty: UnorderedMap[A, B] = {
+    empty[UnorderedMap[A, B]]
+  }
 }
 
 object UnorderedMap extends MutableMapFactory[UnorderedMap] {
+  private[this] class Concrete[A, B](val hashCoder: HashCoder[A]) extends AbstractMapLike[A, B, UnorderedMap[A, B]] with UnorderedMap[A, B]{
+    def empty[T >: UnorderedMap[A, B]](implicit dummy0: Dummy0): UnorderedMap[A, B] = {
+      UnorderedMap.empty[A, B](hashCoder)
+    }
+  }
+  
   val seeder = ThreadLocal(() => new java.util.Random)
 
   implicit def canBuildFrom[A, B]: CanBuildFrom[Coll, (A, B), UnorderedMap[A, B]] = new MapCanBuildFrom[A, B]
 
-  def empty[A, B](implicit coder: HashCoder[A]): UnorderedMap[A, B] = new AbstractMapLike[A, B, UnorderedMap[A, B]] with UnorderedMap[A,B] {
-    val hashCoder = coder
-  }
+  def empty[A, B](implicit coder: HashCoder[A]): UnorderedMap[A, B] = new Concrete(coder)
 
   def empty[A, B] = empty(HashCoder.AnyHashCoder)
 }
