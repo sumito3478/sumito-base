@@ -96,11 +96,17 @@ trait UnorderedMap[@specialized(
     val idx = findIndex(k)
     table(idx).find(_._1 == k).map(_._2)
   }
-
-  def iterator: Iterator[(A, B)] = {
+  
+  override def toVector: Vector[(A, B)] = {
     val builder = new VectorBuilder[(A, B)]
     table foreach (builder ++= _)
-    builder.result.iterator
+    val ret = builder.result
+    _size = ret.size
+    ret
+  }
+
+  def iterator: Iterator[(A, B)] = {
+    toVector.iterator
   }
 }
 
