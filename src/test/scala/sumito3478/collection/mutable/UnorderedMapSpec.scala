@@ -18,7 +18,7 @@ class UnorderedMapSpec extends SpecificationWithJUnit {
   "(unorderedMap: Map)#++" should {
     "return Map that is sum of lhs and rhs" in {
       var s: Map[Int, Int] = UnorderedMap[Int, Int]()
-      s = s ++ (List.range(0, 5000) map (x => x * 2 -> x * 2))
+      s = s ++ (0 until 5000 map (x => x * 2 -> x * 2))
       sum(s map(_._2)) mustEqual 0x17d64b8
     }
   }
@@ -26,12 +26,12 @@ class UnorderedMapSpec extends SpecificationWithJUnit {
   "(unorderedMap: Map)#get" should {
     "return the Some(value) if exists, or None" in {
       var s: Map[Int, Int] = UnorderedMap[Int, Int]()
-      s = s ++ (List.range(0, 5000) map (x => x * 2 -> x * 2))
+      s = s ++ ((0 until 5000) map (x => x * 2 -> x * 2))
       var x = 0
       0 to 10000 foreach {
         i =>
           s get i match {
-            case Some(i) => x += i
+            case Some(v) => x += i
             case None =>
           }
       }

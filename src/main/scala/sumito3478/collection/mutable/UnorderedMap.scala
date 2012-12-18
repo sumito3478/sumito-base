@@ -49,19 +49,16 @@ trait UnorderedMap[@specialized(
   }
 
   private[this] def rehash(): this.type = {
-    val it = iterator
+    val tmp = toVector
     val newLen = (tableLen << 1) + 1
-    println(f"rehashing from tableLen = ${tableLen} to ${newLen}")
     val newTable = Array.tabulate(newLen)(_ => List.empty[(A, B)])
-    it foreach {
-      e =>
-        val h = hashCoder.hashCode(e._1, seed._1, seed._2) & 0x7fffffffffffffffL
-        val idx = (h % newLen).toInt
-        newTable(idx) = e :: newTable(idx)
-    }
     table = newTable
     tableLen = newLen
-    println(f"now tableLen = ${tableLen}")
+    tmp foreach {
+      e =>
+        val idx = findIndex(e._1)
+        table(idx) = e :: table(idx)
+    }
     this
   }
 
@@ -72,8 +69,11 @@ trait UnorderedMap[@specialized(
     }
     if (threshold < _size) {
       rehash
+      val idx = findIndex(kv._1)
+      table(idx) = kv :: (table(idx) filter (_._1 != kv._1))
+    } else {
+      table(idx) = kv :: (table(idx) filter (_._1 != kv._1))
     }
-    table(idx) = kv :: (table(idx) filter (_._1 != kv._1))
     this
   }
 
