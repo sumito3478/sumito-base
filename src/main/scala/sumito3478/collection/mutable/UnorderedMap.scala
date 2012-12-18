@@ -87,9 +87,7 @@ trait UnorderedMap[@specialized(
   }
 
   override def empty: UnorderedMap[A, B] = {
-    new UnorderedMap[A, B] {
-      val hashCoder = self.hashCoder
-    }
+    newBuilder.result
   }
 
   def get(k: A): Option[B] = {
@@ -115,7 +113,7 @@ object UnorderedMap extends MutableMapFactory[UnorderedMap] {
 
   implicit def canBuildFrom[A, B]: CanBuildFrom[Coll, (A, B), UnorderedMap[A, B]] = new MapCanBuildFrom[A, B]
 
-  def empty[A, B](implicit coder: HashCoder[A]): UnorderedMap[A, B] = new UnorderedMap[A, B] {
+  def empty[A, B](implicit coder: HashCoder[A]): UnorderedMap[A, B] = new AbstractMapLike[A, B, UnorderedMap[A, B]] with UnorderedMap[A,B] {
     val hashCoder = coder
   }
 
