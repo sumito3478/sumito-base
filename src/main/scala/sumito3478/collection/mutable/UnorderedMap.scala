@@ -51,6 +51,7 @@ trait UnorderedMap[@specialized(
   private[this] def rehash(): this.type = {
     val it = iterator
     val newLen = (tableLen << 1) + 1
+    println(f"rehashing from tableLen = ${tableLen} to ${newLen}")
     val newTable = Array.tabulate(newLen)(_ => List.empty[(A, B)])
     it foreach {
       e =>
@@ -60,6 +61,7 @@ trait UnorderedMap[@specialized(
     }
     table = newTable
     tableLen = newLen
+    println(f"now tableLen = ${tableLen}")
     this
   }
 
@@ -67,6 +69,9 @@ trait UnorderedMap[@specialized(
     val idx = findIndex(kv._1)
     if ((table(idx) find (_._1 == kv._1)).isEmpty) {
       _size += 1
+    }
+    if(threshold < _size) {
+      rehash
     }
     table(idx) = kv :: (table(idx) filter (_._1 != kv._1))
     this
