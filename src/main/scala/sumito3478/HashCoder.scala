@@ -47,6 +47,7 @@ object HashCoder {
       case x: Float => FloatHashCoder.hashCode(x)
       case x: Double => DoubleHashCoder.hashCode(x)
       case x: String => StringHashCoder.hashCode(x)
+      case x: HashCodable => x.hashCode
       case x => {
         import CityHash._
         fmix(mur(x.hashCode, c._1))
