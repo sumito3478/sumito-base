@@ -2,6 +2,7 @@ package sumito3478.math
 
 import java.nio.ByteBuffer
 import sumito3478.Pointer
+import sumito3478.math.numeric._
 
 object CityHash {
   class ArrayView[@specialized A](val intern: Array[A], val pos: Int) {
@@ -335,11 +336,56 @@ object CityHash {
       }
     }
   }
-  
+
+  def cityHash64(x: Byte): Long = {
+    // copied from hashLen0to16
+    val a, b, c = x
+    val y = a.toInt + (b.toInt << 8)
+    val z = 1 + (c.toInt << 2)
+    shiftMix(y * k._2 ^ z * k._0) * k._2
+  }
+
+  def cityHash64(x: Short): Long = {
+    // copied from hashLen0to16
+    val _x = x.toLE
+    val a = _x >>> 8
+    val b, c = _x & 0xff
+    val y = a.toInt + (b.toInt << 8)
+    val z = 2 + (c.toInt << 2)
+    shiftMix(y * k._2 ^ z * k._0) * k._2
+  }
+
+  def cityHash64(x: Int): Long = {
+    // copied from hashLen0to16
+    val _x = x.toLE
+    val mul = k._2 + 4 * 2
+    val a = _x
+    hashLen16(4 + (a << 3), _x, mul)
+  }
+
+  def cityHash64(x: Long): Long = {
+    // copied from hashLen0to16
+    val _x = x.toLE
+    val mul = k._2 + 8 * 2
+    val a = _x + k._2
+    val b = _x
+    val c = rotate(b, 37) * mul + a
+    val d = (rotate(a, 25) + b) * mul
+    hashLen16(c, d, mul)
+  }
+
+  def cityHash64(x: Float): Long = {
+    cityHash64(x.toBits)
+  }
+
+  def cityHash64(x: Double): Long = {
+    cityHash64(x.toBits)
+  }
+
   def cityHash64WithSeed(s: Pointer, len: Int, seed: Long): Long = {
     cityHash64WithSeeds(s, len, k._2, seed)
   }
-  
+
   def cityHash64WithSeeds(s: Pointer, len: Int, seed0: Long, seed1: Long) = {
     hashLen16(cityHash64(s, len) - seed0, seed1)
   }

@@ -10,7 +10,7 @@ object SumitoTextBuild extends Build {
     settings = StandardProject.newSettings
   ).settings(
     Seq(
-      version := "0.0.12",
+      version := "0.0.13",
       scalaVersion := "2.10.0-RC5",
       scalacOptions ++= Seq(
         "-target:jvm-1.7",
@@ -38,6 +38,7 @@ object SumitoTextBuild extends Build {
           Resolver.withDefaultResolvers(rs, mavenCentral = false)
       },
       libraryDependencies ++= Seq(
+        "org.apache.commons" % "commons-lang3" % "3.1",
         "org.scalaz" % "scalaz-core" % "7.0.0-M6" cross CrossVersion.full,
         "org.specs2" %% "specs2" % "1.12.3" % "test",
         "org.mockito" % "mockito-core" % "1.9.5" % "test",
