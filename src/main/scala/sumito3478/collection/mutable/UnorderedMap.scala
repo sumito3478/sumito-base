@@ -70,7 +70,7 @@ trait UnorderedMap[@specialized(
     if ((table(idx) find (_._1 == kv._1)).isEmpty) {
       _size += 1
     }
-    if(threshold < _size) {
+    if (threshold < _size) {
       rehash
     }
     table(idx) = kv :: (table(idx) filter (_._1 != kv._1))
@@ -90,7 +90,7 @@ trait UnorderedMap[@specialized(
     val idx = findIndex(k)
     table(idx).find(_._1 == k).map(_._2)
   }
-  
+
   override def toVector: Vector[(A, B)] = {
     val builder = new VectorBuilder[(A, B)]
     table foreach (builder ++= _)
@@ -102,21 +102,21 @@ trait UnorderedMap[@specialized(
   def iterator: Iterator[(A, B)] = {
     toVector.iterator
   }
-  
+
   def empty[T >: UnorderedMap[A, B]](implicit dummy0: Dummy0): UnorderedMap[A, B]
-  
+
   override def empty: UnorderedMap[A, B] = {
     empty[UnorderedMap[A, B]]
   }
 }
 
 object UnorderedMap extends MutableMapFactory[UnorderedMap] {
-  private[this] class Concrete[A, B](val hashCoder: HashCoder[A]) extends AbstractMapLike[A, B, UnorderedMap[A, B]] with UnorderedMap[A, B]{
+  private[this] class Concrete[A, B](val hashCoder: HashCoder[A]) extends AbstractMapLike[A, B, UnorderedMap[A, B]] with UnorderedMap[A, B] {
     def empty[T >: UnorderedMap[A, B]](implicit dummy0: Dummy0): UnorderedMap[A, B] = {
       UnorderedMap.empty[A, B](hashCoder)
     }
   }
-  
+
   val seeder = ThreadLocal(() => new java.util.Random)
 
   implicit def canBuildFrom[A, B]: CanBuildFrom[Coll, (A, B), UnorderedMap[A, B]] = new MapCanBuildFrom[A, B]
