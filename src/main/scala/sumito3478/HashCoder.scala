@@ -1,20 +1,36 @@
 package sumito3478
 
+import java.math.{ BigDecimal => JBigDecimal }
+import java.math.{ BigInteger => JBigInt }
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
-import sumito3478.math.CityHash
-import java.nio.CharBuffer
-import java.math.{ BigInteger => JBigInt }
 
-trait HashCoder[@specialized -A] {
+import scala.collection.immutable.List
+import scala.math.BigDecimal
+
+import org.apache.commons.lang3.ArrayUtils
+
+import sumito3478.math.CityHash
+
+trait HashCoder[@specialized(Byte, Short, Char, Long, Float, Double) -A] {
   def hashCode(obj: A): Long
+
+  def hashCode(obj: A, seed: Long): Long = {
+    import CityHash.k
+    hashCode(obj, k._2, seed)
+  }
+
+  def hashCode(obj: A, seed0: Long, seed1: Long): Long = {
+    import CityHash.{ hashLen16, k }
+    hashLen16(hashCode(obj) - seed0, seed1)
+  }
 }
 
 object HashCoder {
   def generateAnyHashCoderSource: String = {
     val coders = List(
       "Byte", "Int", "Short", "Char", "Long", "Float", "Double", "String",
-      "JBitInt", "BitInt")
+      "JBigInt", "BigInt", "JBigDecimal", "BigDecimal")
     coders map {
       coder =>
         s"case x: ${coder} => ${coder}HashCoder.hashCode(x)"
@@ -94,6 +110,7 @@ object HashCoder {
   implicit object JBigIntHashCoder extends HashCoder[JBigInt] {
     def hashCode(x: JBigInt): Long = {
       val data = x.toByteArray
+      ArrayUtils.reverse(data)
       val buffer = ByteBuffer.allocate(data.length)
       buffer.put(data)
       buffer.order(ByteOrder.LITTLE_ENDIAN)
@@ -104,6 +121,20 @@ object HashCoder {
   implicit object BigIntHashCoder extends HashCoder[BigInt] {
     def hashCode(x: BigInt): Long = {
       JBigIntHashCoder.hashCode(x.bigInteger)
+    }
+  }
+
+  implicit object JBigDecimalHashCoder extends HashCoder[JBigDecimal] {
+    def hashCode(x: JBigDecimal): Long = {
+      val intVal = x.unscaledValue
+      val scale = x.scale
+      CityHash.hash128to64(JBigIntHashCoder.hashCode(intVal), IntHashCoder.hashCode(scale))
+    }
+  }
+
+  implicit object BigDecimalHashCoder extends HashCoder[BigDecimal] {
+    def hashCode(x: BigDecimal): Long = {
+      JBigDecimalHashCoder.hashCode(x.bigDecimal)
     }
   }
 }

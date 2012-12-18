@@ -1,0 +1,112 @@
+package sumito3478.collection.mutable
+
+import scala.collection.generic.CanBuildFrom
+import scala.collection.generic.MutableMapFactory
+import scala.collection.immutable.VectorBuilder
+import scala.collection.mutable.Map
+import scala.collection.mutable.MapLike
+
+import sumito3478.HashCoder
+import sumito3478.collection.ThreadLocal
+
+trait UnorderedMap[@specialized(
+  Byte, Short, Char, Long, Float, Double) A, @specialized(
+  Byte, Short, Char, Long, Float, Double) B]
+  extends Map[A, B]
+  with MapLike[A, B, UnorderedMap[A, B]] {
+  self =>
+
+  val seed = {
+    val seeder = UnorderedMap.seeder()
+    (seeder.nextLong, seeder.nextLong)
+  }
+
+  protected[this] val hashCoder: HashCoder[A]
+
+  protected[this] val initialCapacity = 11
+
+  private[this] var table = Array.tabulate(initialCapacity)(_ => List.empty[(A, B)])
+
+  private[this] var tableLen = initialCapacity
+
+  private[this] var _size = 0
+
+  override def size: Int = _size
+
+  override def foreach[U](f: ((A, B)) => U): Unit = {
+    iterator foreach f
+  }
+
+  var loadFactor = 1 // threshold = tableLen / (2 ^ loadFactor)
+
+  def threshold = {
+    tableLen >>> loadFactor
+  }
+
+  private[this] def findIndex(k: A): Int = {
+    val h = hashCoder.hashCode(k, seed._1, seed._2) & 0x7fffffffffffffffL
+    (h % tableLen).toInt
+  }
+
+  private[this] def rehash(): this.type = {
+    val it = iterator
+    val newLen = (tableLen << 1) + 1
+    val newTable = Array.tabulate(newLen)(_ => List.empty[(A, B)])
+    it foreach {
+      e =>
+        val h = hashCoder.hashCode(e._1, seed._1, seed._2) & 0x7fffffffffffffffL
+        val idx = (h % newLen).toInt
+        newTable(idx) = e :: newTable(idx)
+    }
+    table = newTable
+    tableLen = newLen
+    this
+  }
+
+  def +=(kv: (A, B)): this.type = {
+    val idx = findIndex(kv._1)
+    if ((table(idx) find (_._1 == kv._1)).isEmpty) {
+      _size += 1
+    }
+    table(idx) = kv :: (table(idx) filter (_._1 != kv._1))
+    this
+  }
+
+  def -=(k: A): this.type = {
+    val idx = findIndex(k)
+    if ((table(idx) find (_._1 == k)).nonEmpty) {
+      _size -= 1
+    }
+    table(idx) = table(idx) filterNot (_._1 == k)
+    this
+  }
+
+  override def empty: UnorderedMap[A, B] = {
+    new UnorderedMap[A, B] {
+      val hashCoder = self.hashCoder
+    }
+  }
+
+  def get(k: A): Option[B] = {
+    val idx = findIndex(k)
+    table(idx).find(_._1 == k).map(_._2)
+  }
+
+  def iterator: Iterator[(A, B)] = {
+    val builder = new VectorBuilder[(A, B)]
+    table foreach (builder ++= _)
+    builder.result.iterator
+  }
+}
+
+object UnorderedMap extends MutableMapFactory[UnorderedMap] {
+  val seeder = ThreadLocal(() => new java.util.Random)
+
+  implicit def canBuildFrom[A, B]: CanBuildFrom[Coll, (A, B), UnorderedMap[A, B]] = new MapCanBuildFrom[A, B]
+
+  def empty[A, B](implicit coder: HashCoder[A]): UnorderedMap[A, B] = new UnorderedMap[A, B] {
+    val hashCoder = coder
+  }
+
+  def empty[A, B] = empty(HashCoder.AnyHashCoder)
+}
