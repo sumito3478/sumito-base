@@ -47,10 +47,13 @@ object HashCoder {
       case x: Float => FloatHashCoder.hashCode(x)
       case x: Double => DoubleHashCoder.hashCode(x)
       case x: String => StringHashCoder.hashCode(x)
+      case x: JBigInt => JBigIntHashCoder.hashCode(x)
+      case x: BigInt => BigIntHashCoder.hashCode(x)
+      case x: JBigDecimal => JBigDecimalHashCoder.hashCode(x)
+      case x: BigDecimal => BigDecimalHashCoder.hashCode(x)
       case x: HashCodable => x.hashCode[Long]
       case x => {
-        import CityHash._
-        fmix(mur(x.hashCode, c._1))
+        CityHash.cityHash64((x.##.toLong << 32) | (x.getClass.##.toLong))
       }
     }
   }
