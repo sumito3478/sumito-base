@@ -53,8 +53,7 @@ object HashCoder {
       case x: BigDecimal => BigDecimalHashCoder.hashCode(x)
       case x: HashCodable => x.hashCode[Long]
       case x => {
-        import CityHash._
-        fmix(mur(x.hashCode, c._1))
+        CityHash.cityHash64((x.##.toLong << 32) | (x.getClass.##.toLong))
       }
     }
   }
