@@ -16,10 +16,12 @@ trait UnorderedMap[@specialized(
   with MapLike[A, B, UnorderedMap[A, B]] {
   self =>
 
-  val seed = {
+  protected[this] def seed = {
     val seeder = UnorderedMap.seeder()
     (seeder.nextLong, seeder.nextLong)
   }
+
+  protected[this] var _seed = seed
 
   protected[this] val hashCoder: HashCoder[A]
 
@@ -44,7 +46,7 @@ trait UnorderedMap[@specialized(
   }
 
   private[this] def findIndex(k: A): Int = {
-    val h = hashCoder.hashCode(k, seed._1, seed._2) & 0x7fffffffffffffffL
+    val h = hashCoder.hashCode(k, _seed._1, _seed._2) & 0x7fffffffffffffffL
     (h % tableLen).toInt
   }
 
@@ -54,6 +56,7 @@ trait UnorderedMap[@specialized(
     val newTable = Array.tabulate(newLen)(_ => List.empty[(A, B)])
     table = newTable
     tableLen = newLen
+    _seed = seed // reseed
     tmp foreach {
       e =>
         val idx = findIndex(e._1)
