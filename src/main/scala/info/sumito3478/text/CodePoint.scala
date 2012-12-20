@@ -8,8 +8,21 @@ import java.lang.{ Character => JChar }
  * @param intern 32-bit integer that represents Unicode Code Point
  */
 class CodePoint(val intern: Int) extends AnyVal {
-  def toChars: IndexedSeq[Char] = {
-    JChar.toChars(intern)
+  /**
+   * Converts the Code Point to its UTF-16 representation stored in a tuple of
+   * Char.
+   * If the specified code point is a BMP value, the second element of the tuple
+   * is None. If supplementary code point, Some[Char].
+   */
+  def toChars: (Char, Option[Char]) = {
+    val chars = JChar.toChars(intern)
+    val len = chars.length
+    len match {
+      case 1 => (chars(0), None)
+      case 2 => (chars(0), Some(chars(1)))
+      case _ => sys.error(
+          f"java.lang.Character.toChars returned array of which length is $len")
+    }
   }
 
   def digit(radix: Int): Int = {
