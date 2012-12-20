@@ -33,8 +33,8 @@ class CodePoint(val intern: Int) extends AnyVal {
   }
 
   /**
-   * Return the Some(Unicode name) of the code point or None if the code point is
-   * unassigned.
+   * Return the Some(Unicode name) of the code point or None if the code point
+   * is unassigned.
    */
   def name: Option[String] = {
     Option(JChar.getName(intern))
