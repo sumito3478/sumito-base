@@ -10,7 +10,7 @@ object SumitoTextBuild extends Build {
     settings = StandardProject.newSettings
   ).settings(
     Seq(
-      version := "0.0.15",
+      version := "0.0.16",
       scalaVersion := "2.10.0-RC5",
       scalacOptions ++= Seq(
         "-target:jvm-1.7",
