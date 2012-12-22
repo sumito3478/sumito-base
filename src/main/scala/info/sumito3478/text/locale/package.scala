@@ -24,7 +24,8 @@ package object locale {
       retBuilder.result
     }
 
-    private[this] def readToSecondLast(source: StringText): (IndexedSeq[StringText], Int) = {
+    private[this] def readToSecondLast(
+      source: StringText): (IndexedSeq[StringText], Int) = {
       intern.setText(source.toString)
       val first = intern.first
       val last = intern.last
@@ -47,9 +48,11 @@ package object locale {
           val ahead = aheadText.lookAhead(2048)
           queue.enqueue((
             if (ahead.length < 2048) {
-              readAll((new StringTextBuilder ++= aheadText.forceTake(2048)).result)
+              readAll(
+                (new StringTextBuilder ++= aheadText.forceTake(2048)).result)
             } else {
-              val (ret, read) = readToSecondLast((new StringTextBuilder ++= ahead).result)
+              val (ret, read) =
+                readToSecondLast((new StringTextBuilder ++= ahead).result)
               aheadText.forceDrop(read)
               ret
             }): _*)
