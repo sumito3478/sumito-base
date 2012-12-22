@@ -1,11 +1,11 @@
 package info.sumito3478.text.collection.immutable
 
 import info.sumito3478.text.collection.IndexedSeqTextLike
-import info.sumito3478.text.collection.mutable.StringBuilder
+import info.sumito3478.text.collection.mutable.StringTextBuilder
 import scala.collection.mutable.Builder
 
 class StringText(val intern: String) extends IndexedSeq[Char] with IndexedSeqTextLike[StringText] {
-  override def newBuilder: StringBuilder = new StringBuilder
+  override def newBuilder: StringTextBuilder = new StringTextBuilder
   
   def apply(idx: Int): Char = intern charAt idx
 
@@ -13,5 +13,5 @@ class StringText(val intern: String) extends IndexedSeq[Char] with IndexedSeqTex
 }
 
 object StringText {
-  def newBuilder: StringBuilder = new StringBuilder
+  def newBuilder: StringTextBuilder = new StringTextBuilder
 }
