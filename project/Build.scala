@@ -39,6 +39,7 @@ object SumitoTextBuild extends Build {
           Resolver.withDefaultResolvers(rs, mavenCentral = false)
       },
       libraryDependencies ++= Seq(
+        "com.ibm.icu" % "icu4j" % "50.1",
         "org.apache.commons" % "commons-lang3" % "3.1",
         "org.scalaz" % "scalaz-core" % "7.0.0-M6" cross CrossVersion.full,
         "org.specs2" %% "specs2" % "1.12.3" % "test",
