@@ -9,7 +9,7 @@ import info.sumito3478.collection.RichIterator
 
 package object locale {
 
-  implicit class BreakIteratorVal(val intern: BreakIterator) extends AnyVal {
+  implicit class BreakIteratorVal(val intern: BreakIterator) {
     private[this] def readAll(source: StringText): IndexedSeq[StringText] = {
       intern.setText(source.toString)
       val first = intern.first
