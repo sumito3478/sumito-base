@@ -10,7 +10,7 @@ object SumitoTextBuild extends Build {
     settings = StandardProject.newSettings
   ).settings(
     Seq(
-      version := "0.0.16",
+      version := "0.0.17",
       scalaVersion := "2.10.0-RC5",
       scalacOptions ++= Seq(
         "-target:jvm-1.7",
@@ -22,7 +22,7 @@ object SumitoTextBuild extends Build {
         ),
       publishMavenStyle := true,
       publishTo := Some(Resolver.sftp(
-        "sumito3478 Maven Repository",
+        "sumito3478 Maven Repository (push)",
         "maven.sumito3478.info",
         46877,
         "/var/www/maven.sumito3478.info") as (
@@ -31,6 +31,7 @@ object SumitoTextBuild extends Build {
           new java.io.File(System.getProperty("user.home")),
           ".ssh/sumito3478-sshkey"))),
       resolvers := Seq(
+        "sumito3478 Maven Repository (pull)" at "http://maven.sumito3478.info/",
         "Typesafe Snapshots" at "http://repo.typesafe.com/typesafe/snapshots",
         "Maven Repository Mirror" at "http://uk.maven.org/maven2"),
       externalResolvers <<= resolvers map {
@@ -38,6 +39,7 @@ object SumitoTextBuild extends Build {
           Resolver.withDefaultResolvers(rs, mavenCentral = false)
       },
       libraryDependencies ++= Seq(
+        "com.ibm.icu" % "icu4j" % "50.1",
         "org.apache.commons" % "commons-lang3" % "3.1",
         "org.scalaz" % "scalaz-core" % "7.0.0-M6" cross CrossVersion.full,
         "org.specs2" %% "specs2" % "1.12.3" % "test",
